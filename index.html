@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MemoryBoost — Download RAM • Secure Installer</title>
+  <meta name="description" content="MemoryBoost: simulated RAM download and installer. For entertainment/educational purposes only." />
+  <style>
+    :root{ --bg:#0b0f14; --card:#0f1720; --accent:#22d3a6; --muted:#9aa6b2; --glass:rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef3;background:linear-gradient(180deg,var(--bg),#071019);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .wrap{width:960px;max-width:100%;}
+    header{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5a4,#065f46);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+    .card{background:linear-gradient(180deg,var(--card),#071217);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6);}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
+    .badge{display:inline-block;background:var(--glass);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .sysinfo{display:flex;gap:12px;flex-direction:column}
+    .stat{display:flex;justify-content:space-between;padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);}
+    .stat strong{font-size:15px}
+    .big{font-size:34px;font-weight:700;color:var(--accent)}
+    .download-box{display:flex;flex-direction:column;gap:12px}
+    .btn{background:var(--accent);color:#012018;padding:12px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(34,211,166,0.12)}
+    .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(34,211,166,0.12)}
+    .progress{height:18px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#86efac);transition:width 250ms linear}
+    footer{font-size:12px;color:var(--muted);margin-top:12px}
+    .certs{display:flex;gap:8px;align-items:center}
+    .fake-console{background:#071018;padding:12px;border-radius:8px;color:#9bd3c6;font-family:monospace;font-size:13px;min-height:120px;overflow:auto}
+    .note{font-size:13px;color:var(--muted)}
+    @media(max-width:880px){.grid{grid-template-columns:1fr} .brand{gap:8px} .logo{width:48px;height:48px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">MB</div>
+        <div>
+          <h1>MemoryBoost Installer</h1>
+          <p class="lead">Simulated RAM download • Secure virtual installer</p>
+        </div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+        <span class="badge">Verified • MemoryBoost Labs</span>
+        <span class="badge">v3.1</span>
+      </div>
+    </header>
+
+    <div class="card grid">
+      <section>
+        <h2 style="margin-top:0">System Scan</h2>
+        <div class="sysinfo">
+          <div class="stat"><div><strong>Detected OS</strong><div style="color:var(--muted);font-size:12px">{{OS_NAME}}</div></div><div class="big" id="detected-ram">{{RAM}}</div></div>
+          <div class="stat"><div><strong>Recommended Memory Boost</strong><div style="color:var(--muted);font-size:12px">Safe virtual augmentation for multitasking</div></div><div class="big" id="recommended">+8 GB</div></div>
+          <div class="stat"><div><strong>Download Size</strong><div style="color:var(--muted);font-size:12px">Compressed installer</div></div><div class="big" id="size">195 MB</div></div>
+        </div>
+
+        <hr style="border:0;border-top:1px solid rgba(255,255,255,0.03);margin:16px 0">
+
+        <h3>Installer Console</h3>
+        <div class="fake-console" id="console">-- MemoryBoost v3.1 initializing...\nScanning hardware...\n</div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="downloadBtn">Download Installer</button>
+          <button class="btn secondary" id="simulateBtn">Simulate Install</button>
+          <button class="btn secondary" id="resetBtn">Reset</button>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="progress" aria-hidden><i id="bar"></i></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px"><span id="speed">-</span><span id="eta">ETA: -</span></div>
+        </div>
+
+        <footer>
+          <div class="certs"><div style="font-weight:700">MemoryBoost</div><div style="font-size:12px;color:var(--muted);margin-left:8px">• Entertainment build — not a real hardware modifier</div></div>
+        </footer>
+      </section>
+
+      <aside>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card" style="padding:12px;background:linear-gradient(180deg,#0d1a1d,#071117)">
+            <h4 style="margin:0">Quick Actions</h4>
+            <div style="margin-top:10px;display:grid;gap:8px">
+              <div style="display:flex;justify-content:space-between"><div class="note">Save Installer</div><div style="color:var(--muted)">memoryboost_installer.exe</div></div>
+              <div style="display:flex;justify-content:space-between"><div class="note">Checksum</div><div style="color:var(--muted)">a1b2...9f</div></div>
+              <div style="display:flex;justify-content:space-between"><div class="note">Digital Signature</div><div style="color:var(--muted)">MemoryBoost Labs</div></div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:12px">
+            <h4 style="margin:0">FAQ</h4>
+            <div style="margin-top:8px;color:var(--muted);font-size:13px">
+              <strong>Q:</strong> Will this actually add physical RAM? <br>
+              <strong>A:</strong> No. This simulator is for fun/demonstration only and shows what a "download RAM" UI might look like.
+            </div>
+          </div>
+
+          <div class="card" style="padding:12px; display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+            <h4 style="margin:0">Installer Info</h4>
+            <div class="note">Publisher: MemoryBoost Labs</div>
+            <div class="note">Compatibility: Windows / macOS / Linux (simulated)</div>
+            <div class="note">Release: Dec 2025</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <div style="color:var(--muted);font-size:13px">Want this to look even more realistic? Try adding screenshots, fake changelogs, or a 'support' modal.</div>
+    </div>
+  </div>
+
+  <script>
+    // Replace placeholders with real-feeling values
+    const consoleEl = document.getElementById('console');
+    const bar = document.getElementById('bar');
+    const speedEl = document.getElementById('speed');
+    const etaEl = document.getElementById('eta');
+    const ramEl = document.getElementById('detected-ram');
+    const osName = navigator.platform || 'Unknown OS';
+
+    document.querySelectorAll('[id^="detected"]');
+    document.getElementById('detected-ram').textContent = (Math.floor(Math.random()*8)+4) + ' GB';
+    document.querySelector('meta[content]').setAttribute('content','MemoryBoost: simulated RAM download and installer. For entertainment/educational purposes only.');
+
+    function appendLog(text){ consoleEl.textContent += text + '\n'; consoleEl.scrollTop = consoleEl.scrollHeight; }
+
+    let progress = 0; let running = false; let speed = 0;
+
+    function startFakeDownload(){
+      if(running) return;
+      running = true; progress = 0; bar.style.width = '0%'; appendLog('-- Starting download...');
+      let start = Date.now();
+      const id = setInterval(()=>{
+        // simulate variable speed
+        const delta = Math.random()*6 + 2; // percent per tick
+        progress = Math.min(100, progress + delta);
+        bar.style.width = progress + '%';
+        speed = Math.round((Math.random()*2+4) * 10) / 10; // MB/s
+        speedEl.textContent = speed + ' MB/s';
+        const elapsed = (Date.now()-start)/1000;
+        const remaining = progress>=100?0:Math.max(0, Math.round((100-progress)/ (delta) ));
+        etaEl.textContent = 'ETA: ' + Math.max(0, Math.round((100-progress)/delta)) + 's';
+        if(progress >= 100){
+          clearInterval(id); running = false; appendLog('>> Download complete. Verifying checksum...');
+          setTimeout(()=>{appendLog('>> Checksum verified. Preparing virtual memory image...');},900);
+          setTimeout(()=>{appendLog('>> Installer ready. Click "Simulate Install" to continue.');},1700);
+        }
+      }, 600);
+    }
+
+    function simulateInstall(){
+      appendLog('-- Launching installer...');
+      let step = 0;
+      const steps = [
+        'Requesting admin privileges...',
+        'Allocating virtual memory slots...',
+        'Mapping virtual modules...',
+        'Applying memory patches...',
+        'Finalizing...'
+      ];
+      const id = setInterval(()=>{
+        if(step >= steps.length){ clearInterval(id); appendLog('>> Installation complete. Virtual memory available.'); return; }
+        appendLog('> ' + steps[step]);
+        step++;
+      }, 1000);
+    }
+
+    document.getElementById('downloadBtn').addEventListener('click', startFakeDownload);
+    document.getElementById('simulateBtn').addEventListener('click', simulateInstall);
+    document.getElementById('resetBtn').addEventListener('click', ()=>{ progress=0; bar.style.width='0%'; speedEl.textContent='-'; etaEl.textContent='ETA: -'; consoleEl.textContent='-- MemoryBoost v3.1 initializing...\nScanning hardware...\n'; appendLog('-- Ready.'); });
+
+    // Initial logs
+    appendLog('>> MemoryBoost v3.1 (simulator)');
+    appendLog('>> Scanning system...');
+    setTimeout(()=>{ appendLog('> CPU: ' + (navigator.hardwareConcurrency || '4') + ' cores'); },600);
+    setTimeout(()=>{ appendLog('> OS: ' + (navigator.userAgent)); },900);
+    setTimeout(()=>{ appendLog('> RAM detected: ' + document.getElementById('detected-ram').textContent); },1100);
+    setTimeout(()=>{ appendLog('>> Ready. Click "Download Installer" to begin (simulated).'); },1400);
+
+    // Small user-friendly disclaimer in console (kept subtle)
+    setTimeout(()=>{ appendLog('NOTE: This is an entertainment simulator and will NOT change your physical RAM.'); },2000);
+  </script>
+</body>
+</html>
